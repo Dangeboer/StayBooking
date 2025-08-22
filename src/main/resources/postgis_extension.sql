@@ -1,0 +1,6 @@
+-- DROP TABLE IF EXISTS bookings;
+-- DROP TABLE IF EXISTS listings;
+-- DROP TABLE IF EXISTS spatial_ref_sys;
+-- DROP TABLE IF EXISTS users;
+
+CREATE EXTENSION IF NOT EXISTS postgis;
