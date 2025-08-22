@@ -1,12 +1,11 @@
-package com.laioffer.staybooking.listing;
+package com.laioffer.staybooking.service;
 
-import com.laioffer.staybooking.booking.BookingService;
-import com.laioffer.staybooking.location.GeocodingService;
+import com.laioffer.staybooking.exception.DeleteListingNotAllowedException;
+import com.laioffer.staybooking.exception.InvalidListingSearchException;
 import com.laioffer.staybooking.model.GeoPoint;
-import com.laioffer.staybooking.model.ListingDto;
-import com.laioffer.staybooking.model.ListingEntity;
+import com.laioffer.staybooking.model.dto.ListingDto;
+import com.laioffer.staybooking.model.entity.ListingEntity;
 import com.laioffer.staybooking.repository.ListingRepository;
-import com.laioffer.staybooking.storage.ImageStorageService;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.stereotype.Service;

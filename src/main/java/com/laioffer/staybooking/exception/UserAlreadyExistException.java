@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.authentication;
+package com.laioffer.staybooking.exception;
 
 public class UserAlreadyExistException extends RuntimeException {
     public UserAlreadyExistException() {

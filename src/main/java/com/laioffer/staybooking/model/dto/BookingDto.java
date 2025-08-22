@@ -1,4 +1,6 @@
-package com.laioffer.staybooking.model;
+package com.laioffer.staybooking.model.dto;
+
+import com.laioffer.staybooking.model.entity.BookingEntity;
 
 import java.time.LocalDate;
 

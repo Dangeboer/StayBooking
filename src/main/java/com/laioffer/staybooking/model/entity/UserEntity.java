@@ -1,5 +1,6 @@
-package com.laioffer.staybooking.model;
+package com.laioffer.staybooking.model.entity;
 
+import com.laioffer.staybooking.model.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.location;
+package com.laioffer.staybooking.exception;
 
 
 public class GeocodingException extends RuntimeException {

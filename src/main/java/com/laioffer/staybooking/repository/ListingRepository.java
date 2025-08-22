@@ -1,6 +1,6 @@
 package com.laioffer.staybooking.repository;
 
-import com.laioffer.staybooking.model.ListingEntity;
+import com.laioffer.staybooking.model.entity.ListingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

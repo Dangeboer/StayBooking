@@ -1,6 +1,7 @@
-package com.laioffer.staybooking.authentication;
+package com.laioffer.staybooking.service;
 
-import com.laioffer.staybooking.model.UserEntity;
+import com.laioffer.staybooking.model.entity.UserEntity;
+import com.laioffer.staybooking.exception.UserAlreadyExistException;
 import com.laioffer.staybooking.model.UserRole;
 import com.laioffer.staybooking.repository.UserRepository;
 import com.laioffer.staybooking.security.JwtHandler;

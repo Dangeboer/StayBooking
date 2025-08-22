@@ -1,10 +1,10 @@
 package com.laioffer.staybooking;
 
-import com.laioffer.staybooking.booking.DeleteBookingNotAllowedException;
-import com.laioffer.staybooking.booking.InvalidBookingException;
-import com.laioffer.staybooking.booking.ListingBookingsNotAllowedException;
-import com.laioffer.staybooking.listing.DeleteListingNotAllowedException;
-import com.laioffer.staybooking.listing.InvalidListingSearchException;
+import com.laioffer.staybooking.exception.DeleteBookingNotAllowedException;
+import com.laioffer.staybooking.exception.InvalidBookingException;
+import com.laioffer.staybooking.exception.ListingBookingsNotAllowedException;
+import com.laioffer.staybooking.exception.DeleteListingNotAllowedException;
+import com.laioffer.staybooking.exception.InvalidListingSearchException;
 import com.laioffer.staybooking.model.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

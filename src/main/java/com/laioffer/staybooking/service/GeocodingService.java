@@ -1,9 +1,11 @@
-package com.laioffer.staybooking.location;
+package com.laioffer.staybooking.service;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
+import com.laioffer.staybooking.exception.GeocodingException;
+import com.laioffer.staybooking.exception.InvalidAddressException;
 import com.laioffer.staybooking.model.GeoPoint;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.listing;
+package com.laioffer.staybooking.exception;
 
 public class DeleteListingNotAllowedException extends RuntimeException {
 

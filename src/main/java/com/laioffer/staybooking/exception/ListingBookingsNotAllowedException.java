@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.booking;
+package com.laioffer.staybooking.exception;
 
 public class ListingBookingsNotAllowedException extends RuntimeException {
 

@@ -1,8 +1,8 @@
 //package com.laioffer.staybooking;
 //
-//import com.laioffer.staybooking.model.BookingEntity;
-//import com.laioffer.staybooking.model.ListingEntity;
-//import com.laioffer.staybooking.model.UserEntity;
+//import com.laioffer.staybooking.Entity.BookingEntity;
+//import com.laioffer.staybooking.Entity.ListingEntity;
+//import com.laioffer.staybooking.Entity.UserEntity;
 //import com.laioffer.staybooking.model.UserRole;
 //import com.laioffer.staybooking.repository.BookingRepository;
 //import com.laioffer.staybooking.repository.ListingRepository;

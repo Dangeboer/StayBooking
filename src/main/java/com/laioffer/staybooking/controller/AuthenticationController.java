@@ -1,5 +1,6 @@
-package com.laioffer.staybooking.authentication;
+package com.laioffer.staybooking.controller;
 
+import com.laioffer.staybooking.service.AuthenticationService;
 import com.laioffer.staybooking.model.LoginRequest;
 import com.laioffer.staybooking.model.LoginResponse;
 import com.laioffer.staybooking.model.RegisterRequest;

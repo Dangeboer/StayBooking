@@ -1,9 +1,10 @@
-package com.laioffer.staybooking.listing;
+package com.laioffer.staybooking.controller;
 
-import com.laioffer.staybooking.booking.BookingService;
-import com.laioffer.staybooking.model.BookingDto;
-import com.laioffer.staybooking.model.ListingDto;
-import com.laioffer.staybooking.model.UserEntity;
+import com.laioffer.staybooking.service.BookingService;
+import com.laioffer.staybooking.service.ListingService;
+import com.laioffer.staybooking.model.dto.BookingDto;
+import com.laioffer.staybooking.model.dto.ListingDto;
+import com.laioffer.staybooking.model.entity.UserEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
