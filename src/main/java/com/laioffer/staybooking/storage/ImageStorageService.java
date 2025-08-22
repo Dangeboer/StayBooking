@@ -24,20 +24,23 @@ public class ImageStorageService {
     }
 
     public String upload(MultipartFile file) {
-        String filename = UUID.randomUUID().toString(); // 生成一个唯一的文件名，防止文件名冲突，会返回一个随机字符串
-        BlobInfo blobInfo;
-        try {
-            blobInfo = storage.createFrom( // storage.createFrom() 方法将文件上传到 Google Cloud Storage
-                    BlobInfo
-                            .newBuilder(bucketName, filename) // 创建 GCS 文件的元信息，指定存储桶和文件名
-                            .setContentType("image/jpeg") // 指定文件类型为 JPEG 图片
-                            .setAcl(List.of(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))) // 让 所有人都能访问（公开访问），只允许读取文件（不能修改或删除）
-                            .build(), // 构建 BlobInfo 对象
-                    file.getInputStream()); // file.getInputStream() 获取文件的二进制流，然后上传到 GCS
-        } catch (IOException exception) {
-            throw new IllegalStateException("Failed to upload file to GCS");
-        }
-        return blobInfo.getMediaLink(); // 返回 文件的公开 URL，可以在浏览器中访问
+        return "A fake URL of images";
+
+        // 取消了google服务，无法使用期存储图片
+//        String filename = UUID.randomUUID().toString(); // 生成一个唯一的文件名，防止文件名冲突，会返回一个随机字符串
+//        BlobInfo blobInfo;
+//        try {
+//            blobInfo = storage.createFrom( // storage.createFrom() 方法将文件上传到 Google Cloud Storage
+//                    BlobInfo
+//                            .newBuilder(bucketName, filename) // 创建 GCS 文件的元信息，指定存储桶和文件名
+//                            .setContentType("image/jpeg") // 指定文件类型为 JPEG 图片
+//                            .setAcl(List.of(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))) // 让 所有人都能访问（公开访问），只允许读取文件（不能修改或删除）
+//                            .build(), // 构建 BlobInfo 对象
+//                    file.getInputStream()); // file.getInputStream() 获取文件的二进制流，然后上传到 GCS
+//        } catch (IOException exception) {
+//            throw new IllegalStateException("Failed to upload file to GCS");
+//        }
+//        return blobInfo.getMediaLink(); // 返回 文件的公开 URL，可以在浏览器中访问
     }
 }
 
