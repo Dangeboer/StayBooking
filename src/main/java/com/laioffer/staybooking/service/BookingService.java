@@ -9,6 +9,7 @@ import com.laioffer.staybooking.model.entity.ListingEntity;
 import com.laioffer.staybooking.repository.BookingRepository;
 import com.laioffer.staybooking.repository.ListingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -49,6 +50,7 @@ public class BookingService {
     }
 
     // 通过用户id，房源id，入住、退房日期来创建新的预定信息
+    @Transactional
     public void createBooking(long guestId, long listingId, LocalDate checkIn, LocalDate checkOut) {
         if (checkIn.isAfter(checkOut)) { // 入住日期不能晚于退房日期
             throw new InvalidBookingException("Check-in date must be before check-out date.");
@@ -56,11 +58,18 @@ public class BookingService {
         if (checkIn.isBefore(LocalDate.now())) { // 入住时间不能早于当前日期
             throw new InvalidBookingException("Check-in date must be in the future.");
         }
-        // 查询当前房源是否在当前日期内，已经被预定，有冲突
+
+        // 1. 给房源加锁
+        ListingEntity listing = listingRepository.findByIdForUpdate(listingId)
+                .orElseThrow(() -> new InvalidBookingException("Listing not found"));
+
+        // 2. 查询当前房源是否在当前日期内，已经被预定，有冲突
         List<BookingEntity> overlappedBookings = bookingRepository.findOverlappedBookings(listingId, checkIn, checkOut);
         if (!overlappedBookings.isEmpty()) {
             throw new InvalidBookingException("Booking dates conflict, please select different dates.");
         }
+
+        // 3. 保存 booking 信息
         bookingRepository.save(new BookingEntity(null, guestId, listingId, checkIn, checkOut));
     }
 
