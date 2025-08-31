@@ -26,6 +26,8 @@ staybooking:
   gcs:
     bucket: staybooking-bucket-dangeboer123
   geocoding:
-    key: AIzaSyBsFetyu55GTI0_-U4vAQgxeAeaDQMk3wQ
+    provider: amap   # 可选：google / amap
+    google-key: AIzaSyBsFetyu55GTI0_-U4vAQgxeAeaDQMk3wQ
+    amap-key: f72d118c370cc0206938fdccaf89a106
   jwt:
     secret-key: hYW3L6I3gPpEUbtU+17FEHRYJuc8uLYHaLLsuzzyKn4=

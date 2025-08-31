@@ -12,14 +12,14 @@ import java.util.List;
 @Service
 public class HotService {
     private final HotRepository hotRepository;
-    private final GeocodingService geocodingService;
+    private final AmapGeocodingService amapGeocodingService;
 
     public HotService(
             HotRepository hotRepository,
-            GeocodingService geocodingService
+            AmapGeocodingService amapGeocodingService
     ) {
         this.hotRepository = hotRepository;
-        this.geocodingService = geocodingService;
+        this.amapGeocodingService = amapGeocodingService;
     }
 
 
@@ -28,7 +28,7 @@ public class HotService {
     }
 
     public void createHot(String name, Long districtCode, String address) {
-        GeoPoint geoPoint = geocodingService.getGeoPoint(address);
+        GeoPoint geoPoint = amapGeocodingService.getGeoPoint(address);
         GeometryFactory geometryFactory = new GeometryFactory();
 
         hotRepository.save(new HotEntity(
