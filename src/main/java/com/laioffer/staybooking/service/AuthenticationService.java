@@ -30,6 +30,14 @@ public class AuthenticationService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 注册
+     * @param username 用户名
+     * @param password 密码
+     * @param role 角色
+     * @return userEntity
+     * @throws UserAlreadyExistException 用户已存在
+     */
     public UserEntity register(String username, String password, UserRole role) throws UserAlreadyExistException {
         // 检查用户名是否已存在（防止重复注册）
         if (userRepository.existsByUsername(username)) {
@@ -43,7 +51,7 @@ public class AuthenticationService {
 
     // authenticationManager.authenticate() 负责验证用户名和密码：
     //      UsernamePasswordAuthenticationToken(username, password) 创建认证令牌。
-    //      authenticationManager 会将这个令牌交给 AuthenticationProvider 进行身份验证（通常是 DaoAuthenticationProvider）。
+    //      authenticationManager 会将这个令牌交给 AuthenticationProvider 进行身份验证（这里是 DaoAuthenticationProvider）。
     //      验证通过后，Spring Security 会在上下文中存储 SecurityContextHolder，表示用户已登录。
     // 认证通过后，调用 jwtHandler.generateToken(username) 生成 JWT 令牌，并返回给前端。
 

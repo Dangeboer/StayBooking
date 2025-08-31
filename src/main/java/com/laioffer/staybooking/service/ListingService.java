@@ -2,7 +2,7 @@ package com.laioffer.staybooking.service;
 
 import com.laioffer.staybooking.exception.DeleteListingNotAllowedException;
 import com.laioffer.staybooking.exception.InvalidListingSearchException;
-import com.laioffer.staybooking.model.GeoPoint;
+import com.laioffer.staybooking.model.dto.GeoPoint;
 import com.laioffer.staybooking.model.dto.ListingDto;
 import com.laioffer.staybooking.model.entity.ListingEntity;
 import com.laioffer.staybooking.repository.ListingRepository;

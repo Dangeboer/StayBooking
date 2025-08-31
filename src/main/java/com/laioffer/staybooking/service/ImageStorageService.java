@@ -20,7 +20,7 @@ public class ImageStorageService {
     public String upload(MultipartFile file) {
         return "A fake URL of images";
 
-        // 取消了google服务，无法使用期存储图片
+        // 取消了google服务，无法使用其存储图片
 //        String filename = UUID.randomUUID().toString(); // 生成一个唯一的文件名，防止文件名冲突，会返回一个随机字符串
 //        BlobInfo blobInfo;
 //        try {

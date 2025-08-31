@@ -6,7 +6,7 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.laioffer.staybooking.exception.GeocodingException;
 import com.laioffer.staybooking.exception.InvalidAddressException;
-import com.laioffer.staybooking.model.GeoPoint;
+import com.laioffer.staybooking.model.dto.GeoPoint;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

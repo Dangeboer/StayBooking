@@ -24,6 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Configuration
 public class AppConfig {
@@ -48,6 +49,9 @@ public class AppConfig {
         return http.build();
     }
 
+    // 即使你把方法名改成 myCustomAuthProvider，Spring 依然能识别它，因为：
+    // @Bean 会把返回的对象注册到 Spring 容器（ApplicationContext） 里。
+    // Spring 通过 类型 (AuthenticationProvider.class) 而不是 方法名 来查找 Bean。
     @Bean // 认证提供者
     public AuthenticationProvider authenticationProvider(
             UserDetailsService userDetailsService,
@@ -58,10 +62,6 @@ public class AppConfig {
         authProvider.setPasswordEncoder(passwordEncoder); // 检查密码是否正确
         return authProvider;
     }
-
-    // 即使你把方法名改成 myCustomAuthProvider，Spring 依然能识别它，因为：
-    // @Bean 会把返回的对象注册到 Spring 容器（ApplicationContext） 里。
-    // Spring 通过 类型 (AuthenticationProvider.class) 而不是 方法名 来查找 Bean。
 
     @Bean // 认证管理器：选择了 DaoAuthenticationProvider。因为 Spring Security 会发现有一个 AuthenticationProvider，就会自动使用它
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -76,7 +76,7 @@ public class AppConfig {
     // 2. Google Cloud Storage 相关配置
     @Bean
     public Storage storage() throws IOException {
-        Credentials credentials = ServiceAccountCredentials.fromStream(getClass().getClassLoader().getResourceAsStream("credentials.json"));
+        Credentials credentials = ServiceAccountCredentials.fromStream(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("credentials.json")));
         return StorageOptions.newBuilder().setCredentials(credentials).build().getService();
     }
 

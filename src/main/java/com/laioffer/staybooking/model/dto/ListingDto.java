@@ -1,7 +1,6 @@
 package com.laioffer.staybooking.model.dto;
 
 import com.laioffer.staybooking.model.entity.ListingEntity;
-import com.laioffer.staybooking.model.GeoPoint;
 
 import java.util.List;
 
