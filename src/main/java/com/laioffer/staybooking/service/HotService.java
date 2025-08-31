@@ -29,11 +29,13 @@ public class HotService {
 
     public void createHot(String name, Long districtCode, String address) {
         GeoPoint geoPoint = amapGeocodingService.getGeoPoint(address);
+        System.out.println(geoPoint.toString());
         GeometryFactory geometryFactory = new GeometryFactory();
 
         hotRepository.save(new HotEntity(
                 null,
                 name,
+                address,
                 districtCode,
                 geometryFactory.createPoint(new Coordinate(geoPoint.lon(), geoPoint.lat()))
         ));
