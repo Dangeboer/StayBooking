@@ -39,6 +39,7 @@ public class AppConfig {
                                 .requestMatchers("/bookings/**").hasAuthority("ROLE_GUEST")
                                 .requestMatchers("/listings/search").hasAuthority("ROLE_GUEST") // 只允许住户搜索资源
                                 .requestMatchers("/listings/**").hasAuthority("ROLE_HOST")
+                                .requestMatchers("/hots/**").hasAuthority("ROLE_HOST")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -82,7 +83,7 @@ public class AppConfig {
 
     // 3. Google Maps Geocoding API 相关配置
     @Bean
-    public GeoApiContext geoApiContext(@Value("${staybooking.geocoding.key}") String apiKey) {
+    public GeoApiContext geoApiContext(@Value("${staybooking.geocoding.google-key}") String apiKey) {
         return new GeoApiContext.Builder().apiKey(apiKey).build();
     }
 }
