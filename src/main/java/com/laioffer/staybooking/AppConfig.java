@@ -39,7 +39,7 @@ public class AppConfig {
                                 .requestMatchers("/bookings/**").hasAuthority("ROLE_GUEST")
                                 .requestMatchers("/listings/search").hasAuthority("ROLE_GUEST") // 只允许住户搜索资源
                                 .requestMatchers("/listings/**").hasAuthority("ROLE_HOST")
-                                .requestMatchers("/hots/**").hasAuthority("ROLE_HOST")
+                                .requestMatchers("/hots/**").hasAuthority("ROLE_MANAGER")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
