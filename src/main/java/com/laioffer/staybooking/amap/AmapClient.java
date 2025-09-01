@@ -1,6 +1,6 @@
-package com.laioffer.staybooking.map;
+package com.laioffer.staybooking.amap;
 
-import com.laioffer.staybooking.model.AmapGeocodeResponse;
+import com.laioffer.staybooking.model.response.AmapGeocodeResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

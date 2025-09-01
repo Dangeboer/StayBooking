@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.model;
+package com.laioffer.staybooking.model.reqeust;
 
 import java.time.LocalDate;
 

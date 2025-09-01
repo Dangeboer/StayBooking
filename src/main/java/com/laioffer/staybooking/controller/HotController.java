@@ -1,6 +1,6 @@
 package com.laioffer.staybooking.controller;
 
-import com.laioffer.staybooking.model.HotRequest;
+import com.laioffer.staybooking.model.reqeust.HotRequest;
 import com.laioffer.staybooking.model.entity.HotEntity;
 import com.laioffer.staybooking.model.entity.UserEntity;
 import com.laioffer.staybooking.service.HotService;

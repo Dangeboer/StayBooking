@@ -2,7 +2,7 @@ package com.laioffer.staybooking.controller;
 
 import com.laioffer.staybooking.service.BookingService;
 import com.laioffer.staybooking.model.dto.BookingDto;
-import com.laioffer.staybooking.model.BookingRequest;
+import com.laioffer.staybooking.model.reqeust.BookingRequest;
 import com.laioffer.staybooking.model.entity.UserEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

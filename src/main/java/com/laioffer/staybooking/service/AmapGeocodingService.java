@@ -1,7 +1,7 @@
 package com.laioffer.staybooking.service;
 
-import com.laioffer.staybooking.map.AmapClient;
-import com.laioffer.staybooking.model.AmapGeocodeResponse;
+import com.laioffer.staybooking.amap.AmapClient;
+import com.laioffer.staybooking.model.response.AmapGeocodeResponse;
 import com.laioffer.staybooking.model.dto.GeoPoint;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

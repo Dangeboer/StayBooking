@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.model;
+package com.laioffer.staybooking.model.response;
 
 import java.util.List;
 

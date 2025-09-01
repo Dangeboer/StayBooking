@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.model;
+package com.laioffer.staybooking.model.response;
 
 public record ErrorResponse(
         String message,

@@ -1,9 +1,9 @@
 package com.laioffer.staybooking.controller;
 
 import com.laioffer.staybooking.service.AuthenticationService;
-import com.laioffer.staybooking.model.LoginRequest;
-import com.laioffer.staybooking.model.LoginResponse;
-import com.laioffer.staybooking.model.RegisterRequest;
+import com.laioffer.staybooking.model.reqeust.LoginRequest;
+import com.laioffer.staybooking.model.response.LoginResponse;
+import com.laioffer.staybooking.model.reqeust.RegisterRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

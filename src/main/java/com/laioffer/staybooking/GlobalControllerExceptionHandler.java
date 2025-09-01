@@ -5,7 +5,7 @@ import com.laioffer.staybooking.exception.InvalidBookingException;
 import com.laioffer.staybooking.exception.ListingBookingsNotAllowedException;
 import com.laioffer.staybooking.exception.DeleteListingNotAllowedException;
 import com.laioffer.staybooking.exception.InvalidListingSearchException;
-import com.laioffer.staybooking.model.ErrorResponse;
+import com.laioffer.staybooking.model.response.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
