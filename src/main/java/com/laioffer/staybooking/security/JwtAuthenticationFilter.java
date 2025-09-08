@@ -33,6 +33,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    // 这里重写了 OncePerRequestFilter 里的 doFilterInternal() 方法，其实能算模板方法模式
+    // OncePerRequestFilter 本身是 Spring 提供的抽象类，它已经实现了 doFilter 方法，并且在里面写好了整个过滤器的“算法流程”（比如保证每个请求只调用一次过滤逻辑、异常处理、调用链的传递）。
+    // 其中某一步骤——具体如何处理请求——被定义为一个抽象方法 doFilterInternal，留给子类去实现。
+    // 你的 JwtAuthenticationFilter 就是具体的子类，它通过重写 doFilterInternal 来实现自己的业务逻辑（JWT 校验、认证信息注入）。
+    // 在你的 JwtAuthenticationFilter 里，你没有重写 doFilter，而是重写了 doFilterInternal。但项目里最终启用的仍然是 doFilter ——因为 Servlet 过滤器规范要求调用的是 doFilter 方法。
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
