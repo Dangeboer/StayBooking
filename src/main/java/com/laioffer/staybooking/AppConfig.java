@@ -47,6 +47,9 @@ public class AppConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // JwtAuthenticationFilter 在 UsernamePasswordAuthenticationFilter 之前执行，用于解析 JWT 令牌并验证用户身份
         // 先让 jwtAuthenticationFilter 检查 请求里的 Token 是否有效，如果有效就放行
+        // UsernamePasswordAuthenticationFilter = 表单登录用户名/密码验证器
+        // 你的 JwtAuthenticationFilter 放它前面，就是：先用 JWT 验证身份，成功则直接通过，不用走表单登录。
+        // gpt 说 UsernamePasswordAuthenticationFilter 也可以删了，因为已经有 /login 接口显示地配置了登录验证过程
         return http.build();
     }
 
