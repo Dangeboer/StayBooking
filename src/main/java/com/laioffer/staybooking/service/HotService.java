@@ -1,5 +1,7 @@
 package com.laioffer.staybooking.service;
 
+import com.laioffer.staybooking.geography.AmapGeocodingService;
+import com.laioffer.staybooking.geography.GeocodingStrategy;
 import com.laioffer.staybooking.model.dto.GeoPoint;
 import com.laioffer.staybooking.model.entity.HotEntity;
 import com.laioffer.staybooking.repository.HotRepository;
@@ -12,14 +14,14 @@ import java.util.List;
 @Service
 public class HotService {
     private final HotRepository hotRepository;
-    private final AmapGeocodingService amapGeocodingService;
+    private final GeocodingStrategy geocodingStrategy;
 
     public HotService(
             HotRepository hotRepository,
             AmapGeocodingService amapGeocodingService
     ) {
         this.hotRepository = hotRepository;
-        this.amapGeocodingService = amapGeocodingService;
+        this.geocodingStrategy = amapGeocodingService;
     }
 
 
@@ -28,7 +30,7 @@ public class HotService {
     }
 
     public void createHot(String name, Long districtCode, String address) {
-        GeoPoint geoPoint = amapGeocodingService.getGeoPoint(address);
+        GeoPoint geoPoint = geocodingStrategy.getGeoPoint(address);
         System.out.println(geoPoint.toString());
         GeometryFactory geometryFactory = new GeometryFactory();
 

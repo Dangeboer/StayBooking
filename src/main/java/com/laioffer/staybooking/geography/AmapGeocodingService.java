@@ -1,13 +1,14 @@
-package com.laioffer.staybooking.service;
+package com.laioffer.staybooking.geography;
 
-import com.laioffer.staybooking.amap.AmapClient;
 import com.laioffer.staybooking.model.response.AmapGeocodeResponse;
 import com.laioffer.staybooking.model.dto.GeoPoint;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-@Service
-public class AmapGeocodingService {
+@Service("amapGeocoding")
+@ConditionalOnProperty(prefix = "staybooking.geocoding", name = "provider", havingValue = "amap")
+public class AmapGeocodingService implements GeocodingStrategy {
 
     private final AmapClient amapClient;
     private final String amapKey;
@@ -20,6 +21,7 @@ public class AmapGeocodingService {
         this.amapKey = amapKey;
     }
 
+    @Override
     public GeoPoint getGeoPoint(String address) {
         AmapGeocodeResponse response = amapClient.geocode(address, amapKey);
         if (!"1".equals(response.status()) || response.geocodes().isEmpty()) {

@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.amap;
+package com.laioffer.staybooking.geography;
 
 import com.laioffer.staybooking.model.response.AmapGeocodeResponse;
 import org.springframework.cloud.openfeign.FeignClient;

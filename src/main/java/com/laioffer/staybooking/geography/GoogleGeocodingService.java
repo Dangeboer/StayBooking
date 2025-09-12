@@ -1,4 +1,4 @@
-package com.laioffer.staybooking.service;
+package com.laioffer.staybooking.geography;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
@@ -7,20 +7,23 @@ import com.google.maps.model.GeocodingResult;
 import com.laioffer.staybooking.exception.GeocodingException;
 import com.laioffer.staybooking.exception.InvalidAddressException;
 import com.laioffer.staybooking.model.dto.GeoPoint;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 // 就是将String类型的地址 转换成 GeoPoint（经纬度）
-@Service
-public class GeocodingService {
+@Service("googleGeocoding")
+@ConditionalOnProperty(prefix = "staybooking.geocoding", name = "provider", havingValue = "google")
+public class GoogleGeocodingService implements GeocodingStrategy {
 
     private final GeoApiContext context;
 
-    public GeocodingService(GeoApiContext context) {
+    public GoogleGeocodingService(GeoApiContext context) {
         this.context = context;
     }
 
+    @Override
     public GeoPoint getGeoPoint(String address) {
         try {
             // 发送地理编码请求：调用 GeocodingApi.geocode() 方法，传入 address（地址）

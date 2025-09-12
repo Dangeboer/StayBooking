@@ -2,6 +2,7 @@ package com.laioffer.staybooking.service;
 
 import com.laioffer.staybooking.exception.DeleteListingNotAllowedException;
 import com.laioffer.staybooking.exception.InvalidListingSearchException;
+import com.laioffer.staybooking.geography.GeocodingStrategy;
 import com.laioffer.staybooking.model.dto.GeoPoint;
 import com.laioffer.staybooking.model.dto.ListingDto;
 import com.laioffer.staybooking.model.entity.ListingEntity;
@@ -17,18 +18,18 @@ import java.util.List;
 @Service
 public class ListingService {
     private final BookingService bookingService;
-    private final GeocodingService geocodingService;
+    private final GeocodingStrategy geocodingStrategy;
     private final ImageStorageService imageStorageService;
     private final ListingRepository listingRepository;
 
     public ListingService(
             BookingService bookingService,
-            GeocodingService geocodingService,
+            GeocodingStrategy geocodingStrategy,
             ImageStorageService imageStorageService,
             ListingRepository listingRepository
     ) {
         this.bookingService = bookingService;
-        this.geocodingService = geocodingService;
+        this.geocodingStrategy = geocodingStrategy;
         this.imageStorageService = imageStorageService;
         this.listingRepository = listingRepository;
     }
@@ -56,7 +57,7 @@ public class ListingService {
                 .toList();
 
         // 把String的地址转换成经纬度
-        GeoPoint geoPoint = geocodingService.getGeoPoint(address);
+        GeoPoint geoPoint = geocodingStrategy.getGeoPoint(address);
 
         GeometryFactory geometryFactory = new GeometryFactory();
 
