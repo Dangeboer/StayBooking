@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -66,37 +67,62 @@ public class BookingService {
         }
 
         // 使用 Redisson 分布式锁替代数据库锁
-        String lockKey = "booking:lock:listing:" + listingId;
-        RLock lock = redissonClient.getLock(lockKey);
-        
+
+        // Redisson 锁住的不是某个对象，而是 Redis 里的这个 lockKey
+        // 因为加了 listingId，所以锁的粒度是房源（listing）级别，不同的房源是不同的锁，不同房源之间可以并行操作
+        // 同时对每一天加锁，从checkIn的当天到checkOut的前一天，不同的时间段允许同时预定
+        // 这个锁是分布式的，意味着即使你有多台服务同时处理同一个房源预定，也能保证同一时间只有一个线程/服务能操作这个房源
+
+        List<RLock> locks = new ArrayList<>();
+
         try {
-            // 尝试获取锁，最多等待10秒，锁持有时间最多30秒
-            if (lock.tryLock(10, 30, TimeUnit.SECONDS)) {
-                try {
-                    // 1. 检查房源是否存在
-                    ListingEntity listing = listingRepository.findById(listingId)
-                            .orElseThrow(() -> new InvalidBookingException("Listing not found"));
-
-                    // 2. 查询当前房源是否在当前日期内，已经被预定，有冲突
-                    List<BookingEntity> overlappedBookings = bookingRepository.findOverlappedBookings(listingId, checkIn, checkOut);
-                    if (!overlappedBookings.isEmpty()) {
-                        throw new InvalidBookingException("Booking dates conflict, please select different dates.");
-                    }
-
-                    // 3. 保存 booking 信息
-                    bookingRepository.save(new BookingEntity(null, guestId, listingId, checkIn, checkOut));
-                } finally {
-                    // 确保在方法结束时释放锁
-                    if (lock.isHeldByCurrentThread()) {
-                        lock.unlock();
-                    }
+            // 依次尝试获取每一天的锁
+            for (LocalDate date = checkIn; date.isBefore(checkOut); date = date.plusDays(1)) {
+                String lockKey = "booking:lock:listing:" + listingId + ":" + date;
+                RLock lock = redissonClient.getLock(lockKey);
+                // 尝试获取锁，最多等待10秒，锁持有时间最多30秒
+                if (!lock.tryLock(10, 30, TimeUnit.SECONDS)) {
+                    throw new InvalidBookingException("Unable to acquire lock for date: " + date);
                 }
-            } else {
-                throw new InvalidBookingException("Unable to acquire lock for booking. Please try again.");
+                locks.add(lock);
             }
+
+        /*
+          lock.tryLock(10, 30, TimeUnit.SECONDS) 执行这个相当于：
+          Redisson 底层会在 Redis 里执行类似 SET lockKey someUniqueValue NX PX 30000 的操作，
+          其中 lockKey 是你定义的锁名称（比如 "booking:lock:listing:123"），
+          someUniqueValue 是一个唯一标识用来区分不同客户端或线程，
+          NX 表示只有在 key 不存在时才设置，PX 30000 表示锁的过期时间为 30 秒。
+          这个操作相当于在 Redis 里“创建一个门锁”，拿到 key 就表示你获得了锁，其他线程或服务再尝试获取同样的锁会失败。
+          锁释放时，Redisson 会检查 key 的值是否与自己持有的唯一标识一致，确认无误后才删除 key，从而释放锁。
+         */
+
+            // 1. 检查房源是否存在
+            ListingEntity listing = listingRepository.findById(listingId)
+                    .orElseThrow(() -> new InvalidBookingException("Listing not found"));
+
+            // 2. 查询当前房源是否在当前日期内，已经被预定，有冲突
+            List<BookingEntity> overlappedBookings = bookingRepository.findOverlappedBookings(listingId, checkIn, checkOut);
+            if (!overlappedBookings.isEmpty()) {
+                throw new InvalidBookingException("Booking dates conflict, please select different dates.");
+            }
+
+            // 3. 保存 booking 信息
+            bookingRepository.save(new BookingEntity(null, guestId, listingId, checkIn, checkOut));
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new InvalidBookingException("Booking process was interrupted. Please try again.");
+        } finally {
+            // 确保在方法结束时释放所有锁
+            for (RLock lock : locks) {
+                if (lock.isHeldByCurrentThread()) {
+                    lock.unlock();
+                    // 当调用 lock.unlock() 释放锁时，Redisson 并不会直接删掉 Redis 里的 key，而是先检查这个 key 的值是不是自己之前设置的那个唯一标识。
+                    // 如果是自己设置的值，说明确实是自己持有的锁，就安全地删除 key，释放锁。
+                    // 如果不是自己设置的值，说明锁可能已经被其他线程或服务抢到或续租了，这时不会删除 key，避免误删别人持有的锁。
+                }
+            }
         }
     }
 
