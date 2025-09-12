@@ -21,12 +21,18 @@ spring:
     init:
       mode: always
       schema-locations: "classpath:postgis_extension.sql"
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: 0
 
 staybooking:
   gcs:
     bucket: staybooking-bucket-dangeboer123
   geocoding:
-    provider: amap   # 可选：google / amap
+    provider: amap # 可选：google / amap
     google-key: AIzaSyBsFetyu55GTI0_-U4vAQgxeAeaDQMk3wQ
     amap-key: f72d118c370cc0206938fdccaf89a106
   jwt:

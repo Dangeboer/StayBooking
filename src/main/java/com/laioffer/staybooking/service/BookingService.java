@@ -8,24 +8,30 @@ import com.laioffer.staybooking.model.entity.BookingEntity;
 import com.laioffer.staybooking.model.entity.ListingEntity;
 import com.laioffer.staybooking.repository.BookingRepository;
 import com.laioffer.staybooking.repository.ListingRepository;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final ListingRepository listingRepository;
+    private final RedissonClient redissonClient;
 
     public BookingService(
             BookingRepository bookingRepository,
-            ListingRepository listingRepository
+            ListingRepository listingRepository,
+            RedissonClient redissonClient
     ) {
         this.bookingRepository = bookingRepository;
         this.listingRepository = listingRepository;
+        this.redissonClient = redissonClient;
     }
 
     // 通过住户id找预定信息，把返回的entity转换为dto，再返回；保证隐私数据的不泄漏
@@ -59,18 +65,39 @@ public class BookingService {
             throw new InvalidBookingException("Check-in date must be in the future.");
         }
 
-        // 1. 给房源加锁
-        ListingEntity listing = listingRepository.findByIdForUpdate(listingId)
-                .orElseThrow(() -> new InvalidBookingException("Listing not found"));
+        // 使用 Redisson 分布式锁替代数据库锁
+        String lockKey = "booking:lock:listing:" + listingId;
+        RLock lock = redissonClient.getLock(lockKey);
+        
+        try {
+            // 尝试获取锁，最多等待10秒，锁持有时间最多30秒
+            if (lock.tryLock(10, 30, TimeUnit.SECONDS)) {
+                try {
+                    // 1. 检查房源是否存在
+                    ListingEntity listing = listingRepository.findById(listingId)
+                            .orElseThrow(() -> new InvalidBookingException("Listing not found"));
 
-        // 2. 查询当前房源是否在当前日期内，已经被预定，有冲突
-        List<BookingEntity> overlappedBookings = bookingRepository.findOverlappedBookings(listingId, checkIn, checkOut);
-        if (!overlappedBookings.isEmpty()) {
-            throw new InvalidBookingException("Booking dates conflict, please select different dates.");
+                    // 2. 查询当前房源是否在当前日期内，已经被预定，有冲突
+                    List<BookingEntity> overlappedBookings = bookingRepository.findOverlappedBookings(listingId, checkIn, checkOut);
+                    if (!overlappedBookings.isEmpty()) {
+                        throw new InvalidBookingException("Booking dates conflict, please select different dates.");
+                    }
+
+                    // 3. 保存 booking 信息
+                    bookingRepository.save(new BookingEntity(null, guestId, listingId, checkIn, checkOut));
+                } finally {
+                    // 确保在方法结束时释放锁
+                    if (lock.isHeldByCurrentThread()) {
+                        lock.unlock();
+                    }
+                }
+            } else {
+                throw new InvalidBookingException("Unable to acquire lock for booking. Please try again.");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new InvalidBookingException("Booking process was interrupted. Please try again.");
         }
-
-        // 3. 保存 booking 信息
-        bookingRepository.save(new BookingEntity(null, guestId, listingId, checkIn, checkOut));
     }
 
     // 删除某个预定关系：先通过预定id找到预定信息，如果当前住户id符合预定信息里的住户id，就允许删除

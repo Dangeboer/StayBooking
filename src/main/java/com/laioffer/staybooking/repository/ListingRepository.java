@@ -1,20 +1,13 @@
 package com.laioffer.staybooking.repository;
 
 import com.laioffer.staybooking.model.entity.ListingEntity;
-import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface ListingRepository extends JpaRepository<ListingEntity, Long> {
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query(value = "SELECT * FROM listings WHERE id = :listingId", nativeQuery = true)
-    Optional<ListingEntity> findByIdForUpdate(long listingId);
 
     List<ListingEntity> findAllByHostId(Long hostId);
 
