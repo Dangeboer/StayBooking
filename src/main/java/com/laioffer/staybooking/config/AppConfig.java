@@ -1,4 +1,4 @@
-package com.laioffer.staybooking;
+package com.laioffer.staybooking.config;
 
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
